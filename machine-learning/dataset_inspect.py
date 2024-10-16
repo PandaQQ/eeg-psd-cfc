@@ -18,7 +18,7 @@ y = np.where(y == 1, 0, 1)
 
 
 # Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
 # check X_train 's state = 1 and =2's percentage
 print("y_train's state = 1's percentage: ", len(y_train[y_train == 0])/len(y_train))

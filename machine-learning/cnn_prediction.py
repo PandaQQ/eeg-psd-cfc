@@ -104,6 +104,8 @@ with torch.no_grad():
 new_data = my_new_data.to(device)
 my_new_label = my_new_label.to(device)
 
+print(new_data.shape)
+
 # Preprocess your new data as needed
 # new_data = preprocess(new_data)
 
@@ -112,10 +114,13 @@ class_labels = {0: 'Resting', 1: 'Active'}
 
 
 with torch.no_grad():
+
     logits = model(new_data)
     probabilities = F.softmax(logits, dim=1)
     predicted_classes = torch.argmax(probabilities, dim=1)
     probabilities_percentage = probabilities * 100
+
+
 
     for i in range(new_data.size(0)):
         real_label_idx = my_new_label[i]

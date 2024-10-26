@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from eeg_cnn_predictor import EEGCNNPredictor
 
 # After defining the desired channels and before the while loop
-model_path = 'my_cnn_model.pth'
+model_path = 'my_cnn_model_2.pth'
 predictor = EEGCNNPredictor(model_path)
 
 # Resolve the EEG stream
@@ -55,7 +55,9 @@ ch_names = [ch_names[i] for i in desired_indices]
 mne_info = mne.create_info(ch_names=ch_names, sfreq=sfreq, ch_types='eeg')
 
 # Set parameters for time-frequency analysis
-frequencies = np.logspace(np.log10(1), np.log10(60), num=44)  # Frequencies from 1 to 60 Hz
+# frequencies = np.logspace(np.log10(1), np.log10(60), num=44)  # Frequencies from 1 to 60 Hz
+frequencies = np.linspace(1, 60, 44)  # Adjust as needed
+
 n_cycles = frequencies / 2.0  # Number of cycles in Morlet wavelet
 
 # Define chunk duration in seconds and calculate the number of samples per chunk
@@ -97,6 +99,10 @@ while True:
     # Reshape data for tfr_array_morlet (add an epoch dimension)
     data_chunk = data_chunk[np.newaxis, :, :]  # Shape becomes (1, n_desired_channels, n_times)
 
+    # Print the shape of the data chunk
+    print(f"Data chunk shape: {data_chunk.shape}")
+
+
     # Perform time-frequency decomposition using Morlet wavelets
     power = mne.time_frequency.tfr_array_morlet(
         data_chunk,
@@ -122,7 +128,7 @@ while True:
 
     # Process the power data as needed
     # For example, plot the TFR of the first desired channel
-    '''
+
     plt.figure(figsize=(10, 6))
     plt.imshow(
         power[0, 0, :, :],
@@ -136,6 +142,7 @@ while True:
     plt.title(f'Time-Frequency Representation - Channel {ch_names[0]}')
     plt.colorbar(label='Power')
     plt.show()
-    '''
+
+
     # Optional: Include a condition to break the loop if needed
     # break

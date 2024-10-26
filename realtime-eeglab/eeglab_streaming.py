@@ -8,6 +8,11 @@ raw = mne.io.read_raw_eeglab(eeglab_file, preload=True)
 # resample data to 150 Hz
 raw.resample(150)
 
+# Convert from microvolts to volts
+eeg_data_in_volts = raw.get_data() * 1e6
+# If you want to replace the data in the MNE object itself:
+raw._data = eeg_data_in_volts
+
 # Extract data and metadata
 data, times = raw.get_data(return_times=True)
 n_channels = raw.info['nchan']

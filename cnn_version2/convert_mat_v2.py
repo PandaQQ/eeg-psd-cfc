@@ -82,8 +82,11 @@ for ch_j, ch in enumerate(chs):
     for j in range(num_segments_calcu):
         temp = data_calcu[int(j * srate):int((j + 1) * srate)]
         temp_reshaped = temp[np.newaxis, np.newaxis, :]
-        complex_tfr = tfr_array_morlet(temp_reshaped, srate, freqs=freqs,
-                                       n_cycles=n_cycles, output='complex')
+        complex_tfr = tfr_array_morlet(temp_reshaped,
+                                       srate,
+                                       freqs=freqs,
+                                       n_cycles=n_cycles,
+                                       output='complex')
         wt = complex_tfr[0, 0, :, :]
         cwt_calcu_list.append(np.abs(wt))
     cwt_calcu_all_ch = np.stack(cwt_calcu_list, axis=-1)

@@ -246,5 +246,5 @@ plt.show()
 
 # save the model
 
-# torch.save(model.state_dict(), 'my_cnn_model.pth')
-# print("Model saved to my_cnn_model.pth")
+torch.save(model.state_dict(), 'my_cnn_model.pth')
+print("Model saved to my_cnn_model.pth")

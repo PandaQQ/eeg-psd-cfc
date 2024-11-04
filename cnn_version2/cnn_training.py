@@ -44,17 +44,21 @@ label = torch.tensor(label, device=device, dtype=torch.long)
 # label_test = label[temp[600:]]
 
 
+data_set_size = 1300
+
 temp = torch.randperm(1800)  # Adjusted for twice the amount of data
-data = data[torch.cat((temp[:960], torch.arange(1800, 2760))), :, :, :]  # Adjusted indices
-label = label[torch.cat((temp[:960], torch.arange(1800, 2760)))]
+data = data[torch.cat((temp[:1300], torch.arange(1800, 3100))), :, :, :]  # Adjusted indices
+label = label[torch.cat((temp[:1300], torch.arange(1800, 3100)))]
 
 label = torch.tensor(label, device=device, dtype=torch.long).squeeze()
 
-temp = torch.randperm(1920)  # Adjusted for twice the amount of data
-data_train = data[temp[:1200], :, :, :]  # Adjusted sizes
-data_test = data[temp[1200:], :, :, :]
-label_train = label[temp[:1200]]
-label_test = label[temp[1200:]]
+temp = torch.randperm(2600)  # Adjusted for twice the amount of data
+data_train = data[temp[:data_set_size], :, :, :]  # Adjusted sizes
+data_test = data[temp[data_set_size:], :, :, :]
+label_train = label[temp[:data_set_size]]
+label_test = label[temp[data_set_size:]]
+
+
 
 
 # conv1 = nn.Conv2d(10, 10, (51,1))
@@ -126,7 +130,7 @@ class my_cnn(nn.Module):
 
 
 def get_data(batch_size, g):
-    idx = torch.randint(0, 600 - batch_size, (1,))
+    idx = torch.randint(0, data_set_size - batch_size, (1,))
     x = torch.empty((batch_size, 10, data_train.shape[2], data_train.shape[3]), device=device)
     y = label_train[idx:idx + batch_size]
     for j in range(batch_size):
@@ -246,5 +250,5 @@ plt.show()
 
 # save the model
 
-torch.save(model.state_dict(), 'my_cnn_model.pth')
+torch.save(model.state_dict(), 'my_cnn_model_2.pth')
 print("Model saved to my_cnn_model.pth")

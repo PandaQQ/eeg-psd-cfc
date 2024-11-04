@@ -4,13 +4,39 @@ from mne.time_frequency import tfr_array_morlet
 from scipy.io import savemat
 
 # Load the EEG data
-raw = mne.io.read_raw_eeglab('ouyang_1008_90Hz.set', preload=False)
+# raw = mne.io.read_raw_eeglab('ouyang_1008_90Hz.set', preload=False)
+# raw.resample(150)
+#
+# import mne
+
+# Load the EEG data
+raw = mne.io.read_raw_eeglab('ouyang_1008_90Hz.set', preload=True)
 raw.resample(150)
+
+
+# Display a summary of the dataset
+# print("Dataset Summary")
+# print("----------------")
+# print(f"Sampling Frequency (Hz): {raw.info['sfreq']}")
+# print(f"Number of Channels: {raw.info['nchan']}")
+# print(f"Channel Names: {raw.ch_names}")
+# print(f"Data Duration (seconds): {raw.times[-1]}")
+# print(f"Highpass Filter (Hz): {raw.info['highpass']}")
+# print(f"Lowpass Filter (Hz): {raw.info['lowpass']}")
+#
+# # Additional details
+# print(f"Data Shape: {raw._data.shape}")  # (n_channels, n_samples)
+# print(f"EEG Montage: {raw.get_montage()}")
+# print(f"Annotations: {raw.annotations}")
+#
+# exit()
+
 # show image with size 32 * 1400
 # raw.plot(n_channels=32, duration=1400, scalings={'eeg': 100e-6})
 # raw.plot_psd()
 # exit()
-srate = raw.info['sfreq']
+# srate = raw.info['sfreq']
+srate = 150
 
 # Convert from microvolts to volts
 eeg_data_in_volts = raw.get_data() * 1e6
@@ -69,8 +95,12 @@ for ch_j, ch in enumerate(chs):
     for j in range(num_segments_relax):
         temp = data_relax[int(j * srate):int((j + 1) * srate)]
         temp_reshaped = temp[np.newaxis, np.newaxis, :]
-        complex_tfr = tfr_array_morlet(temp_reshaped, srate, freqs=freqs,
-                                       n_cycles=n_cycles, output='complex')
+        complex_tfr = tfr_array_morlet(temp_reshaped,
+                                       srate,
+                                       freqs=freqs,
+                                       n_cycles=n_cycles,
+                                       output='complex',
+                                       zero_mean=True)
         wt = complex_tfr[0, 0, :, :]
         cwt_relax_list.append(np.abs(wt))
     cwt_relax_all_ch = np.stack(cwt_relax_list, axis=-1)
@@ -86,7 +116,8 @@ for ch_j, ch in enumerate(chs):
                                        srate,
                                        freqs=freqs,
                                        n_cycles=n_cycles,
-                                       output='complex')
+                                       output='complex',
+                                       zero_mean=True)
         wt = complex_tfr[0, 0, :, :]
         cwt_calcu_list.append(np.abs(wt))
     cwt_calcu_all_ch = np.stack(cwt_calcu_list, axis=-1)

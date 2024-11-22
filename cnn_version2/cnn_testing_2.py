@@ -37,6 +37,7 @@ chunk_samples = int(sampling_rate * chunk_duration)
 
 # Process each second of EEG data
 predictions = []
+predictions_labels = []
 for sec in range(int(raw.times[-1])):
     # Extract data for the current second
     start, stop = sec * sampling_rate, (sec + 1) * sampling_rate
@@ -102,19 +103,19 @@ for sec in range(int(raw.times[-1])):
 # print("All predictions:", predictions)
 
 # Generate time values for the x-axis
-seconds = np.arange(len(predictions))
-
-# Plot the line for predictions
-plt.figure(figsize=(12, 4))
-plt.plot(seconds, predictions, color='blue', linestyle='-', linewidth=1)
-
-# Overlay points with color based on state (0 for green, 2 for red)
-colors = ['red' if p == 2 else 'green' for p in predictions]
-plt.scatter(seconds, predictions, color=colors, s=20, zorder=3)
-
-# Formatting the plot
-plt.xlabel("Time (seconds)")
-plt.ylabel("State")
-plt.yticks([0, 2], labels=["Resting", "Active"])
-plt.title("EEG Activity Over Time")
-plt.show()
+# seconds = np.arange(len(predictions))
+#
+# # Plot the line for predictions
+# plt.figure(figsize=(12, 4))
+# plt.plot(seconds, predictions, color='blue', linestyle='-', linewidth=1)
+#
+# # Overlay points with color based on state (0 for green, 2 for red)
+# colors = ['red' if p == 2 else 'green' for p in predictions]
+# plt.scatter(seconds, predictions, color=colors, s=20, zorder=3)
+#
+# # Formatting the plot
+# plt.xlabel("Time (seconds)")
+# plt.ylabel("State")
+# plt.yticks([0, 2], labels=["Resting", "Active"])
+# plt.title("EEG Activity Over Time")
+# plt.show()
